@@ -1,4 +1,5 @@
 const GNMATH_API = "https://cdn.jsdelivr.net/gh/freebuisness/assets@main/zones.json";
+// yo tetsing //
 const GNMATH_COVER = "https://cdn.jsdelivr.net/gh/freebuisness/covers@main";
 const GNMATH_HTML = "https://cdn.jsdelivr.net/gh/freebuisness/html@main";
 const UGS_API = "https://cdn.jsdelivr.net/gh/Sea-Math/ugs-json@main/games.json";
@@ -409,27 +410,6 @@ class LumiSDK {
                 } else {
                     htmlText = `${baseTag}\n${htmlText}`;
                 }
-            }
-
-            const urlPatchScript = `<script>
-                (function() {
-                    var OriginalURL = window.URL;
-                    window.URL = function(url, base) {
-                        try {
-                            return new OriginalURL(url, base);
-                        } catch (e) {
-                            return new OriginalURL(url, '${baseUrl}');
-                        }
-                    };
-                    window.URL.createObjectURL = OriginalURL.createObjectURL;
-                    window.URL.revokeObjectURL = OriginalURL.revokeObjectURL;
-                })();
-            </script>`;
-
-            if (htmlText.match(/<head[^>]*>/i)) {
-                htmlText = htmlText.replace(/(<head[^>]*>)/i, `$1\n    ${urlPatchScript}`);
-            } else {
-                htmlText = `${urlPatchScript}\n${htmlText}`;
             }
 
             this.currentGameHtml = htmlText;
