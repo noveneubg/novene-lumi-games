@@ -1,5 +1,4 @@
 const GNMATH_API = "https://cdn.jsdelivr.net/gh/freebuisness/assets@main/zones.json";
-// yo tetsing //
 const GNMATH_COVER = "https://cdn.jsdelivr.net/gh/freebuisness/covers@main";
 const GNMATH_HTML = "https://cdn.jsdelivr.net/gh/freebuisness/html@main";
 const UGS_API = "https://cdn.jsdelivr.net/gh/Sea-Math/ugs-json@main/games.json";
@@ -35,18 +34,18 @@ class LumiSDK {
         };
 
         this.colors = {
-            menuBackground: "transparent", gameBackground: "red", text: "#ffffff",
-            searchBackground: "transparent", searchBorder: "#222", searchFocus: "#555",
-            dropdownBackground: "#0a0a0a", dropdownBorder: "#222", cardBackground: "#050505",
-            cardBorder: "#1a1a1a", cardHoverBorder: "#444", badgeBackground: "rgba(0,0,0,0.9)",
-            badgeText: "#ffffff", randomBtnBg: "#ffffff", randomBtnText: "#000000",
-            randomBtnHover: "#e0e0e0", pageBtnBg: "#0a0a0a", pageBtnText: "#ffffff",
-            pageBtnBorder: "#222", pageBtnActiveBg: "#ffffff", pageBtnActiveText: "#000000",
-            actionBtnBorder: "#333", backBtnBg: "#aa2e25", backBtnHover: "#d32f2f",
-            backBtnText: "#ffffff", downloadBtnBg: "#000000", downloadBtnHover: "#1a1a1a",
-            downloadBtnText: "#ffffff", blankBtnBg: "#000000", blankBtnHover: "#1a1a1a",
-            blankBtnText: "#ffffff", fullscreenBtnBg: "#0a0a0a", fullscreenBtnHover: "#1a1a1a",
-            fullscreenBtnText: "#ffffff"
+            menuBackground: "#040706", gameBackground: "#040706", text: "#d3e3d9",
+            searchBackground: "#0a100c", searchBorder: "#152219", searchFocus: "#1f7a4d",
+            dropdownBackground: "#0d1511", dropdownBorder: "#152219", cardBackground: "#070c09",
+            cardBorder: "#1f7a4d", cardHoverBorder: "#35b97a", badgeBackground: "rgba(4,7,6,0.9)",
+            badgeText: "#d3e3d9", randomBtnBg: "#1f7a4d", randomBtnText: "#d3e3d9",
+            randomBtnHover: "#35b97a", pageBtnBg: "#0a100c", pageBtnText: "#729080",
+            pageBtnBorder: "#152219", pageBtnActiveBg: "#1f7a4d", pageBtnActiveText: "#d3e3d9",
+            actionBtnBorder: "#152219", backBtnBg: "#0a100c", backBtnHover: "#0d1511",
+            backBtnText: "#d3e3d9", downloadBtnBg: "#1f7a4d", downloadBtnHover: "#35b97a",
+            downloadBtnText: "#d3e3d9", blankBtnBg: "#0a100c", blankBtnHover: "#1f7a4d",
+            blankBtnText: "#d3e3d9", fullscreenBtnBg: "#1f7a4d", fullscreenBtnHover: "#35b97a",
+            fullscreenBtnText: "#d3e3d9"
         };
     }
 
@@ -75,51 +74,57 @@ class LumiSDK {
         style.id = 'lumi-styles';
 
         style.innerHTML = `
-            .lumi-wrapper { font-family: ${this.config.fontFamily}; background: ${c.menuBackground}; color: ${c.text}; width: 100vw; height: 100vh; padding: 2vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; }
+            .lumi-wrapper { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: transparent; color: var(--text); width: 100%; min-height: 0; box-sizing: border-box; display: flex; flex-direction: column; }
             .lumi-wrapper *, .lumi-wrapper *::before, .lumi-wrapper *::after { box-sizing: border-box; }
-            .lumi-menu-view { display: flex; flex-direction: column; height: 100%; width: 100%; }
-            .lumi-header { flex-shrink: 0; display: flex; gap: 1vw; margin-bottom: 2vh; align-items: center; }
+            .lumi-menu-view { display: flex; flex-direction: column; width: 100%; min-height: 0; }
+            .lumi-header { flex-shrink: 0; display: flex; gap: 10px; margin-bottom: 20px; align-items: center; flex-wrap: wrap; }
 
-            .lumi-search { flex-grow: 1; padding: 1.5vh 1.5vw; border: 1px solid ${c.searchBorder}; border-radius: 8px; background: ${c.searchBackground}; color: ${c.text}; font-size: max(14px, 1vw); outline: none; transition: all 0.3s ease; }
-            .lumi-search:focus { border-color: ${c.searchFocus}; }
-            .lumi-search::placeholder { color: #666; }
+            .lumi-search { flex: 1 1 160px; min-width: 160px; max-width: 420px; height: 42px; padding: 0 16px; border: 1px solid rgba(255,255,255,.09); border-radius: 12px; background: rgba(10,16,12,.5); -webkit-backdrop-filter: blur(16px) saturate(1.25); backdrop-filter: blur(16px) saturate(1.25); box-shadow: inset 0 1px 0 rgba(255,255,255,.06); color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; outline: none; transition: border-color .18s ease, box-shadow .18s ease, background .18s ease; }
+            .lumi-search:focus { border-color: rgba(var(--green-rgb),.5); background: rgba(10,16,12,.68); box-shadow: 0 0 0 3px var(--green-soft), inset 0 1px 0 rgba(255,255,255,.06); }
+            .lumi-search::placeholder { color: var(--muted); }
 
-            .lumi-source-select { padding: 1.5vh 1.5vw; border: 1px solid ${c.dropdownBorder}; border-radius: 8px; background: ${c.dropdownBackground}; color: ${c.text}; font-size: max(14px, 1vw); outline: none; cursor: pointer; transition: all 0.3s ease; }
-            .lumi-source-select:hover { filter: brightness(1.2); }
+            .lumi-source-select { height: 42px; padding: 0 14px; border: 1px solid rgba(255,255,255,.09); border-radius: 12px; background: rgba(10,16,12,.5); -webkit-backdrop-filter: blur(16px) saturate(1.25); backdrop-filter: blur(16px) saturate(1.25); box-shadow: inset 0 1px 0 rgba(255,255,255,.06); color: var(--text-dim); font-family: 'Inter', sans-serif; font-size: 13px; outline: none; cursor: pointer; transition: border-color .18s ease, color .18s ease, background .18s ease; }
+            .lumi-source-select:hover { color: var(--text); border-color: rgba(255,255,255,.15); }
+            .lumi-source-select:focus { border-color: rgba(var(--green-rgb),.5); box-shadow: 0 0 0 3px var(--green-soft); }
+            .lumi-source-select option { background-color: #0d1511; color: #d3e3d9; }
 
-            .lumi-btn { background: ${c.randomBtnBg}; color: ${c.randomBtnText}; border: none; padding: 1.5vh 2vw; border-radius: 8px; cursor: pointer; font-size: max(13px, 0.9vw); font-weight: 700; transition: all 0.2s ease; text-transform: uppercase; }
-            .lumi-btn:hover { background: ${c.randomBtnHover}; transform: translateY(-2px); }
-            .lumi-btn:active { transform: translateY(1px); }
+            .lumi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; max-width: 1020px; }
 
-            .lumi-grid { flex-grow: 1; display: grid; grid-template-columns: repeat(${this.config.columns}, 1fr); grid-template-rows: repeat(${this.config.rows}, 1fr); gap: 1.5vh 1vw; min-height: 0; }
+            .lumi-game-card { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; aspect-ratio: 1 / 1; padding: 16px 12px; background: rgba(10,16,12,.5); -webkit-backdrop-filter: blur(16px) saturate(1.3); backdrop-filter: blur(16px) saturate(1.3); border: 1px solid rgba(255,255,255,.09); border-radius: 16px; box-shadow: inset 0 1px 0 rgba(255,255,255,.07); color: var(--text-dim); font-family: 'Inter', sans-serif; text-align: center; cursor: pointer; overflow: hidden; transition: background .18s ease, border-color .18s ease, transform .18s ease, box-shadow .18s ease; }
+            .lumi-game-card:hover { background: rgba(13,21,17,.58); border-color: rgba(var(--green-rgb),.45); transform: translateY(-3px); box-shadow: 0 16px 36px -16px rgba(0,0,0,.75), 0 0 0 1px rgba(var(--green-rgb),.12), inset 0 1px 0 rgba(255,255,255,.09); color: var(--text); }
+            .lumi-game-ic { display: flex; align-items: center; justify-content: center; width: 76px; height: 76px; flex-shrink: 0; border-radius: 18px; background: rgba(var(--green-rgb),.08); border: 1px solid rgba(var(--green-rgb),.16); color: var(--green); overflow: hidden; transition: background .18s ease, border-color .18s ease, color .18s ease; }
+            .lumi-game-card:hover .lumi-game-ic { color: var(--green-lit); background: rgba(var(--green-rgb),.13); border-color: rgba(var(--green-rgb),.32); }
+            .lumi-game-img { width: 100%; height: 100%; border-radius: 17px; object-fit: cover; display: block; }
+            .lumi-game-title { font-size: 12.5px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
 
-            .lumi-game-card { background: ${c.cardBackground}; border-radius: 12px; overflow: hidden; position: relative; transition: all 0.2s ease; cursor: pointer; border: 1px solid ${c.cardBorder}; width: 100%; height: 100%; }
-            .lumi-game-card:hover { transform: scale(1.02); border-color: ${c.cardHoverBorder}; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 10; }
-            .lumi-game-img { width: 100%; height: 100%; object-fit: cover; transition: all 0.3s ease; }
-            .lumi-game-card:hover .lumi-game-img { filter: brightness(0.6); transform: scale(1.05); }
+            .lumi-empty { grid-column: 1 / -1; padding: 38px 0; color: var(--muted); font-size: 13px; text-align: center; }
 
-            .lumi-badge { position: absolute; top: 8px; right: 8px; background: ${c.badgeBackground}; color: ${c.badgeText}; font-size: max(9px, 0.7vw); font-weight: 700; padding: 4px 8px; border-radius: 6px; z-index: 2; border: 1px solid #333; text-transform: uppercase; }
-            .lumi-game-title-overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, #000 0%, rgba(0,0,0,0.9) 60%, transparent 100%); color: ${c.text}; padding: 20px 10px 10px 10px; font-size: max(12px, 0.9vw); font-weight: 700; text-align: center; opacity: 0; transition: opacity 0.2s ease; pointer-events: none; z-index: 2; }
-            .lumi-game-card:hover .lumi-game-title-overlay { opacity: 1; }
+            .lumi-pagination { flex-shrink: 0; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+            .lumi-page-btn { height: 30px; padding: 0 14px; border: 1px solid rgba(255,255,255,.09); background: rgba(10,16,12,.5); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); color: var(--text-dim); border-radius: 999px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 12px; transition: background .18s ease, border-color .18s ease, color .18s ease; }
+            .lumi-page-btn:hover { color: var(--text); border-color: rgba(255,255,255,.16); background: rgba(13,21,17,.6); }
+            .lumi-page-btn.active { background: rgba(var(--green-rgb),.24); color: var(--green-lit); border-color: rgba(var(--green-rgb),.5); }
 
-            .lumi-pagination { flex-shrink: 0; display: flex; justify-content: center; gap: 0.5vw; margin-top: 2vh; }
-            .lumi-page-btn { padding: 1vh 1.5vw; border: 1px solid ${c.pageBtnBorder}; background: ${c.pageBtnBg}; color: ${c.pageBtnText}; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; font-weight: 600; font-size: max(13px, 0.9vw); }
-            .lumi-page-btn:hover { filter: brightness(1.2); }
-            .lumi-page-btn.active { background: ${c.pageBtnActiveBg}; color: ${c.pageBtnActiveText}; border-color: ${c.pageBtnActiveBg}; }
+            .lumi-game-view { display: none; position: relative; width: 100%; min-height: 60vh; background: rgba(4,7,6,.45); -webkit-backdrop-filter: blur(20px) saturate(1.2); backdrop-filter: blur(20px) saturate(1.2); border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,.1); box-shadow: inset 0 1px 0 rgba(255,255,255,.06); }
+            .lumi-iframe { width: 100%; height: 70vh; min-height: 420px; border: none; background: transparent; }
+            .lumi-toolbar { position: absolute; top: 14px; left: 14px; display: flex; gap: 6px; z-index: 10; padding: 6px; border-radius: 14px; background: rgba(7,12,9,.6); -webkit-backdrop-filter: blur(14px) saturate(1.25); backdrop-filter: blur(14px) saturate(1.25); border: 1px solid rgba(255,255,255,.1); box-shadow: 0 8px 24px -12px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.07); }
 
-            .lumi-game-view { display: none; position: relative; width: 100%; height: 100%; background: ${c.gameBackground}; border-radius: 12px; overflow: hidden; border: 1px solid #222; }
-            .lumi-iframe { width: 100%; height: 100%; border: none; background: transparent; }
-            .lumi-toolbar { position: absolute; top: 12px; left: 12px; display: flex; gap: 10px; z-index: 10; }
+            .lumi-action-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 1px solid transparent; background: transparent; color: var(--text-dim); border-radius: 10px; cursor: pointer; transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease; }
+            .lumi-action-btn svg { width: 17px; height: 17px; }
+            .lumi-action-btn:hover { background: rgba(255,255,255,.07); color: var(--text); border-color: rgba(255,255,255,.1); }
+            .lumi-action-btn:active { transform: scale(.94); }
+            .lumi-back-btn { background: rgba(var(--green-rgb),.22); border-color: rgba(var(--green-rgb),.35); color: var(--green-lit); }
+            .lumi-back-btn:hover { background: rgba(var(--green-rgb),.34); border-color: rgba(var(--green-rgb),.55); color: var(--text); }
 
-            .lumi-action-btn { border: 1px solid ${c.actionBtnBorder}; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px; transition: all 0.2s ease; }
-            .lumi-back-btn { background: ${c.backBtnBg}; color: ${c.backBtnText}; }
-            .lumi-back-btn:hover { background: ${c.backBtnHover}; }
-            .lumi-download-btn { background: ${c.downloadBtnBg}; color: ${c.downloadBtnText}; }
-            .lumi-download-btn:hover { background: ${c.downloadBtnHover}; }
-            .lumi-aboutblank-btn { background: ${c.blankBtnBg}; color: ${c.blankBtnText}; }
-            .lumi-aboutblank-btn:hover { background: ${c.blankBtnHover}; }
-            .lumi-fullscreen-btn { background: ${c.fullscreenBtnBg}; color: ${c.fullscreenBtnText}; }
-            .lumi-fullscreen-btn:hover { background: ${c.fullscreenBtnHover}; }
+            .launch-lumi::-webkit-scrollbar { width: 10px; }
+            .launch-lumi::-webkit-scrollbar-track { background: transparent; }
+            .launch-lumi::-webkit-scrollbar-thumb { background: rgba(var(--green-rgb),.22); border-radius: 999px; border: 2px solid transparent; background-clip: content-box; }
+            .launch-lumi::-webkit-scrollbar-thumb:hover { background: rgba(var(--green-rgb),.38); background-clip: content-box; border: 2px solid transparent; }
+
+            @media (max-width: 560px) {
+                .lumi-grid { grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 12px; }
+                .lumi-game-ic { width: 60px; height: 60px; border-radius: 14px; }
+                .lumi-game-img { border-radius: 13px; }
+            }
         `;
 
         document.head.appendChild(style);
@@ -131,23 +136,20 @@ class LumiSDK {
                 <div class="lumi-menu-view">
                     <div class="lumi-header">
                         <select class="lumi-source-select">
-                            <option value="All">All Sources</option>
-                            <option value="GNMath">GNMath</option>
-                            <option value="UGS">UGS</option>
-                            <option value="Daknux">Daknux</option>
+                            <option value="All">all</option>
+                            <option value="GNMath">gnmath</option>
+                            <option value="UGS">ugs</option>
+                            <option value="Daknux">daknux</option>
                         </select>
-                        <input type="text" class="lumi-search" placeholder="Search games...">
-                        <button class="lumi-btn lumi-random-btn">Random Game</button>
+                        <input type="text" class="lumi-search" placeholder="search games...">
                     </div>
                     <div class="lumi-grid"></div>
                     <div class="lumi-pagination"></div>
                 </div>
                 <div class="lumi-game-view">
                     <div class="lumi-toolbar">
-                        <button class="lumi-action-btn lumi-back-btn">Back</button>
-                        <button class="lumi-action-btn lumi-download-btn">Download .html</button>
-                        <button class="lumi-action-btn lumi-aboutblank-btn">Open in about:blank</button>
-                        <button class="lumi-action-btn lumi-fullscreen-btn">Fullscreen</button>
+                        <button class="lumi-action-btn lumi-back-btn" title="back" aria-label="back"><i data-lucide="arrow-left"></i></button>
+                        <button class="lumi-action-btn lumi-fullscreen-btn" title="fullscreen" aria-label="fullscreen"><i data-lucide="maximize"></i></button>
                     </div>
                     <iframe class="lumi-iframe" src="" sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms" allowfullscreen></iframe>
                 </div>
@@ -160,13 +162,10 @@ class LumiSDK {
         this.pagination = this.container.querySelector('.lumi-pagination');
         this.searchInput = this.container.querySelector('.lumi-search');
         this.sourceSelect = this.container.querySelector('.lumi-source-select');
-        this.randomBtn = this.container.querySelector('.lumi-random-btn');
 
         this.gameView = this.container.querySelector('.lumi-game-view');
         this.iframe = this.container.querySelector('.lumi-iframe');
         this.backBtn = this.container.querySelector('.lumi-back-btn');
-        this.downloadBtn = this.container.querySelector('.lumi-download-btn');
-        this.aboutBlankBtn = this.container.querySelector('.lumi-aboutblank-btn');
         this.fullscreenBtn = this.container.querySelector('.lumi-fullscreen-btn');
 
         this.searchInput.addEventListener('input', (e) => {
@@ -179,32 +178,7 @@ class LumiSDK {
             this.applyFilters();
         });
 
-        this.randomBtn.addEventListener('click', () => this.playRandom());
         this.backBtn.addEventListener('click', () => this.closeGame());
-        this.downloadBtn.addEventListener('click', () => this.downloadGame());
-
-        this.aboutBlankBtn.addEventListener('click', () => {
-            const win = window.open('about:blank', '_blank');
-            if (win) {
-                win.document.write(`<!DOCTYPE html><html><head><title>${this.currentGameTitle}</title><style>body, html { margin:0; padding:0; width:100%; height:100%; overflow:hidden; background:${this.colors.gameBackground}; }</style></head><body></body></html>`);
-                win.document.close();
-
-                const iframe = win.document.createElement('iframe');
-                iframe.style.cssText = "width:100%; height:100%; border:none; background:transparent;";
-                iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-pointer-lock allow-forms");
-                iframe.setAttribute("allowfullscreen", "true");
-
-                if (this.currentGameHtml) {
-                    win.document.body.appendChild(iframe);
-                    iframe.contentDocument.open();
-                    iframe.contentDocument.write(this.currentGameHtml);
-                    iframe.contentDocument.close();
-                } else {
-                    iframe.src = this.currentGameUrl;
-                    win.document.body.appendChild(iframe);
-                }
-            }
-        });
 
         this.fullscreenBtn.addEventListener('click', () => {
             if (this.gameView.requestFullscreen) {
@@ -215,6 +189,16 @@ class LumiSDK {
                 this.iframe.requestFullscreen();
             }
         });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.gameView && this.gameView.style.display === 'block') {
+                this.closeGame();
+            }
+        });
+
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
     }
 
     cleanPath(path) {
@@ -313,19 +297,31 @@ class LumiSDK {
         this.updateView();
     }
 
+    escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
     renderGrid() {
         this.grid.innerHTML = '';
         const start = (this.currentPage - 1) * this.config.gamesPerPage;
         const pageGames = this.filteredGames.slice(start, start + this.config.gamesPerPage);
 
+        if (pageGames.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'lumi-empty';
+            empty.textContent = 'no games found';
+            this.grid.appendChild(empty);
+            return;
+        }
+
         const fragment = document.createDocumentFragment();
         pageGames.forEach(game => {
             const card = document.createElement('div');
             card.className = 'lumi-game-card';
+            card.title = game.title;
             card.innerHTML = `
-                <span class="lumi-badge">${game.source}</span>
-                <img src="${game.cover}" alt="${game.title}" class="lumi-game-img" loading="lazy" onerror="this.src='${FALLBACK_IMAGE}'">
-                <div class="lumi-game-title-overlay">${game.title}</div>
+                <span class="lumi-game-ic"><img src="${game.cover}" alt="" class="lumi-game-img" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"></span>
+                <span class="lumi-game-title">${this.escapeHtml(game.title)}</span>
             `;
             card.onclick = () => this.playGame(game);
             fragment.appendChild(card);
@@ -352,7 +348,7 @@ class LumiSDK {
             fragment.appendChild(btn);
         };
 
-        if (this.currentPage > 1) createBtn('Prev', this.currentPage - 1);
+        if (this.currentPage > 1) createBtn('prev', this.currentPage - 1);
 
         let startPage = Math.max(1, this.currentPage - 2);
         let endPage = Math.min(totalPages, startPage + 4);
@@ -361,7 +357,7 @@ class LumiSDK {
             createBtn(i, i, i === this.currentPage);
         }
 
-        if (this.currentPage < totalPages) createBtn('Next', this.currentPage + 1);
+        if (this.currentPage < totalPages) createBtn('next', this.currentPage + 1);
 
         this.pagination.appendChild(fragment);
     }
@@ -421,26 +417,6 @@ class LumiSDK {
         }
     }
 
-    downloadGame() {
-        if (!this.currentGameHtml) {
-            alert("This game cannot be downloaded directly (cross-origin restrictions or no source provided).");
-            return;
-        }
-
-        const blob = new Blob([this.currentGameHtml], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-
-        const cleanTitle = this.currentGameTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-        a.download = `${cleanTitle}.html`;
-
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
-
     closeGame() {
         this.gameView.style.display = 'none';
         this.menuView.style.display = 'flex';
@@ -449,12 +425,6 @@ class LumiSDK {
         this.currentGameUrl = "";
         this.currentGameHtml = "";
         this.currentGameTitle = "game";
-    }
-
-    playRandom() {
-        if (this.filteredGames.length === 0) return;
-        const randomGame = this.filteredGames[Math.floor(Math.random() * this.filteredGames.length)];
-        this.playGame(randomGame);
     }
 }
 
