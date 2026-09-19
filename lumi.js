@@ -12,7 +12,6 @@ const DAKNUX_API_URLS = [
 let DAKNUX_API = DAKNUX_API_URLS[Math.floor(Math.random() * DAKNUX_API_URLS.length)];
 const DAKNUX_COVER = "https://cdn.jsdelivr.net/gh/daknux/covers@main";
 const DAKNUX_HTML = "https://cdn.jsdelivr.net/gh/daknux/html@main";
-const FALLBACK_IMAGE = "https://s3.envato.com/files/fed15e2f-5abf-4758-a1a2-3e3d68013f0d/inline_image_preview.jpg";
 
 class LumiSDK {
     constructor() {
@@ -60,7 +59,12 @@ class LumiSDK {
 
         this.injectStyles();
         this.buildUI();
-        await this.loadGames();
+        this.grid.innerHTML = '<div class="lumi-empty">loading games...</div>';
+        try {
+            await this.loadGames();
+        } catch (e) {
+            console.error("lumi: failed to load games", e);
+        }
         this.applyFilters();
     }
 
@@ -77,38 +81,45 @@ class LumiSDK {
             .lumi-wrapper { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: transparent; color: var(--text); width: 100%; min-height: 0; box-sizing: border-box; display: flex; flex-direction: column; }
             .lumi-wrapper *, .lumi-wrapper *::before, .lumi-wrapper *::after { box-sizing: border-box; }
             .lumi-menu-view { display: flex; flex-direction: column; width: 100%; min-height: 0; }
-            .lumi-header { flex-shrink: 0; display: flex; gap: 10px; margin-bottom: 20px; align-items: center; flex-wrap: wrap; }
+            .lumi-header { flex-shrink: 0; display: flex; gap: 10px; width: 100%; max-width: 1200px; margin: 0 auto 20px; align-items: center; flex-wrap: wrap; justify-content: center; }
 
-            .lumi-search { flex: 1 1 160px; min-width: 160px; max-width: 420px; height: 42px; padding: 0 16px; border: 1px solid rgba(255,255,255,.09); border-radius: 12px; background: rgba(10,16,12,.5); -webkit-backdrop-filter: blur(16px) saturate(1.25); backdrop-filter: blur(16px) saturate(1.25); box-shadow: inset 0 1px 0 rgba(255,255,255,.06); color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; outline: none; transition: border-color .18s ease, box-shadow .18s ease, background .18s ease; }
+            .lumi-search { flex: 1 1 160px; min-width: 160px; max-width: 420px; height: 38px; padding: 0 16px; border: 1px solid rgba(255,255,255,.09); border-radius: 12px; background: rgba(10,16,12,.5); -webkit-backdrop-filter: blur(16px) saturate(1.25); backdrop-filter: blur(16px) saturate(1.25); box-shadow: inset 0 1px 0 rgba(255,255,255,.06); color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; outline: none; transition: border-color .18s ease, box-shadow .18s ease, background .18s ease; }
             .lumi-search:focus { border-color: rgba(var(--green-rgb),.5); background: rgba(10,16,12,.68); box-shadow: 0 0 0 3px var(--green-soft), inset 0 1px 0 rgba(255,255,255,.06); }
             .lumi-search::placeholder { color: var(--muted); }
 
-            .lumi-source-select { height: 42px; padding: 0 14px; border: 1px solid rgba(255,255,255,.09); border-radius: 12px; background: rgba(10,16,12,.5); -webkit-backdrop-filter: blur(16px) saturate(1.25); backdrop-filter: blur(16px) saturate(1.25); box-shadow: inset 0 1px 0 rgba(255,255,255,.06); color: var(--text-dim); font-family: 'Inter', sans-serif; font-size: 13px; outline: none; cursor: pointer; transition: border-color .18s ease, color .18s ease, background .18s ease; }
+            .lumi-count { flex-shrink: 0; font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+            .lumi-source-select { height: 38px; padding: 0 14px; border: 1px solid rgba(255,255,255,.09); border-radius: 12px; background: rgba(10,16,12,.5); -webkit-backdrop-filter: blur(16px) saturate(1.25); backdrop-filter: blur(16px) saturate(1.25); box-shadow: inset 0 1px 0 rgba(255,255,255,.06); color: var(--text-dim); font-family: 'Inter', sans-serif; font-size: 13px; outline: none; cursor: pointer; transition: border-color .18s ease, color .18s ease, background .18s ease; }
             .lumi-source-select:hover { color: var(--text); border-color: rgba(255,255,255,.15); }
             .lumi-source-select:focus { border-color: rgba(var(--green-rgb),.5); box-shadow: 0 0 0 3px var(--green-soft); }
             .lumi-source-select option { background-color: #0d1511; color: #d3e3d9; }
 
-            .lumi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; max-width: 1020px; }
+            .lumi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 18px; width: 100%; max-width: 1200px; margin: 0 auto; justify-content: center; }
 
             .lumi-game-card { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; aspect-ratio: 1 / 1; padding: 16px 12px; background: rgba(10,16,12,.5); -webkit-backdrop-filter: blur(16px) saturate(1.3); backdrop-filter: blur(16px) saturate(1.3); border: 1px solid rgba(255,255,255,.09); border-radius: 16px; box-shadow: inset 0 1px 0 rgba(255,255,255,.07); color: var(--text-dim); font-family: 'Inter', sans-serif; text-align: center; cursor: pointer; overflow: hidden; transition: background .18s ease, border-color .18s ease, transform .18s ease, box-shadow .18s ease; }
             .lumi-game-card:hover { background: rgba(13,21,17,.58); border-color: rgba(var(--green-rgb),.45); transform: translateY(-3px); box-shadow: 0 16px 36px -16px rgba(0,0,0,.75), 0 0 0 1px rgba(var(--green-rgb),.12), inset 0 1px 0 rgba(255,255,255,.09); color: var(--text); }
-            .lumi-game-ic { display: flex; align-items: center; justify-content: center; width: 76px; height: 76px; flex-shrink: 0; border-radius: 18px; background: rgba(var(--green-rgb),.08); border: 1px solid rgba(var(--green-rgb),.16); color: var(--green); overflow: hidden; transition: background .18s ease, border-color .18s ease, color .18s ease; }
+            .lumi-game-ic { display: flex; align-items: center; justify-content: center; width: 96px; height: 96px; flex-shrink: 0; border-radius: 18px; background: rgba(var(--green-rgb),.08); border: 1px solid rgba(var(--green-rgb),.16); color: var(--green); overflow: hidden; transition: background .18s ease, border-color .18s ease, color .18s ease; }
             .lumi-game-card:hover .lumi-game-ic { color: var(--green-lit); background: rgba(var(--green-rgb),.13); border-color: rgba(var(--green-rgb),.32); }
             .lumi-game-img { width: 100%; height: 100%; border-radius: 17px; object-fit: cover; display: block; }
+            .lumi-game-ic svg { width: 34px; height: 34px; }
             .lumi-game-title { font-size: 12.5px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
 
             .lumi-empty { grid-column: 1 / -1; padding: 38px 0; color: var(--muted); font-size: 13px; text-align: center; }
 
             .lumi-pagination { flex-shrink: 0; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-            .lumi-page-btn { height: 30px; padding: 0 14px; border: 1px solid rgba(255,255,255,.09); background: rgba(10,16,12,.5); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); color: var(--text-dim); border-radius: 999px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 12px; transition: background .18s ease, border-color .18s ease, color .18s ease; }
+            .lumi-page-btn { height: 28px; padding: 0 13px; border: 1px solid rgba(255,255,255,.09); background: rgba(10,16,12,.5); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); color: var(--text-dim); border-radius: 999px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 12px; transition: background .18s ease, border-color .18s ease, color .18s ease; }
             .lumi-page-btn:hover { color: var(--text); border-color: rgba(255,255,255,.16); background: rgba(13,21,17,.6); }
             .lumi-page-btn.active { background: rgba(var(--green-rgb),.24); color: var(--green-lit); border-color: rgba(var(--green-rgb),.5); }
 
             .lumi-game-view { display: none; position: relative; width: 100%; min-height: 60vh; background: rgba(4,7,6,.45); -webkit-backdrop-filter: blur(20px) saturate(1.2); backdrop-filter: blur(20px) saturate(1.2); border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,.1); box-shadow: inset 0 1px 0 rgba(255,255,255,.06); }
-            .lumi-iframe { width: 100%; height: 70vh; min-height: 420px; border: none; background: transparent; }
+            .lumi-iframe { width: 100%; height: 70vh; min-height: 420px; border: none; background: #000; }
+            .lumi-iframe:fullscreen { width: 100vw; height: 100vh; min-height: 0; }
+            .lumi-iframe:-webkit-full-screen { width: 100vw; height: 100vh; min-height: 0; }
+            .lumi-game-view:fullscreen { min-height: 0; padding: 0; border: none; border-radius: 0; }
+            .lumi-game-view:fullscreen .lumi-iframe { height: 100vh; }
             .lumi-toolbar { position: absolute; top: 14px; left: 14px; display: flex; gap: 6px; z-index: 10; padding: 6px; border-radius: 14px; background: rgba(7,12,9,.6); -webkit-backdrop-filter: blur(14px) saturate(1.25); backdrop-filter: blur(14px) saturate(1.25); border: 1px solid rgba(255,255,255,.1); box-shadow: 0 8px 24px -12px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.07); }
 
-            .lumi-action-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 1px solid transparent; background: transparent; color: var(--text-dim); border-radius: 10px; cursor: pointer; transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease; }
+            .lumi-action-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 1px solid transparent; background: transparent; color: var(--text-dim); border-radius: 10px; cursor: pointer; transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease; }
             .lumi-action-btn svg { width: 17px; height: 17px; }
             .lumi-action-btn:hover { background: rgba(255,255,255,.07); color: var(--text); border-color: rgba(255,255,255,.1); }
             .lumi-action-btn:active { transform: scale(.94); }
@@ -121,8 +132,8 @@ class LumiSDK {
             .launch-lumi::-webkit-scrollbar-thumb:hover { background: rgba(var(--green-rgb),.38); background-clip: content-box; border: 2px solid transparent; }
 
             @media (max-width: 560px) {
-                .lumi-grid { grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 12px; }
-                .lumi-game-ic { width: 60px; height: 60px; border-radius: 14px; }
+                .lumi-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+                .lumi-game-ic { width: 80px; height: 80px; border-radius: 14px; }
                 .lumi-game-img { border-radius: 13px; }
             }
         `;
@@ -142,6 +153,7 @@ class LumiSDK {
                             <option value="Daknux">daknux</option>
                         </select>
                         <input type="text" class="lumi-search" placeholder="search games...">
+                        <span class="lumi-count"></span>
                     </div>
                     <div class="lumi-grid"></div>
                     <div class="lumi-pagination"></div>
@@ -161,6 +173,7 @@ class LumiSDK {
         this.grid = this.container.querySelector('.lumi-grid');
         this.pagination = this.container.querySelector('.lumi-pagination');
         this.searchInput = this.container.querySelector('.lumi-search');
+        this.countEl = this.container.querySelector('.lumi-count');
         this.sourceSelect = this.container.querySelector('.lumi-source-select');
 
         this.gameView = this.container.querySelector('.lumi-game-view');
@@ -181,12 +194,17 @@ class LumiSDK {
         this.backBtn.addEventListener('click', () => this.closeGame());
 
         this.fullscreenBtn.addEventListener('click', () => {
-            if (this.gameView.requestFullscreen) {
+            const el = this.iframe || this.gameView;
+            if (el.requestFullscreen) {
+                el.requestFullscreen();
+            } else if (el.webkitRequestFullscreen) {
+                el.webkitRequestFullscreen();
+            } else if (el.mozRequestFullScreen) {
+                el.mozRequestFullScreen();
+            } else if (el.msRequestFullscreen) {
+                el.msRequestFullscreen();
+            } else if (this.gameView.requestFullscreen) {
                 this.gameView.requestFullscreen();
-            } else if (this.gameView.webkitRequestFullscreen) {
-                this.gameView.webkitRequestFullscreen();
-            } else if (this.iframe.requestFullscreen) {
-                this.iframe.requestFullscreen();
             }
         });
 
@@ -215,8 +233,11 @@ class LumiSDK {
         let loadedGames = [];
         const fetchJSON = async (url) => {
             try {
-                return await (await fetch(url)).json();
+                const res = await fetch(url, { signal: AbortSignal.timeout(25000) });
+                if (!res.ok) return [];
+                return await res.json();
             } catch (e) {
+                console.error("lumi: fetch failed", url, e);
                 return [];
             }
         };
@@ -228,7 +249,7 @@ class LumiSDK {
 
             loadedGames.push({
                 title: g.title || g.name,
-                cover: g.cover ? `${GNMATH_COVER}/${this.cleanPath(g.cover)}` : FALLBACK_IMAGE,
+                cover: g.cover ? `${GNMATH_COVER}/${this.cleanPath(g.cover)}` : "",
                 url: gameUrl,
                 source: "GNMath"
             });
@@ -262,7 +283,7 @@ class LumiSDK {
 
             loadedGames.push({
                 title: g.title || g.name,
-                cover: finalCover || FALLBACK_IMAGE,
+                cover: finalCover || "",
                 url: finalUrl,
                 source: "UGS"
             });
@@ -275,7 +296,7 @@ class LumiSDK {
 
             loadedGames.push({
                 title: g.title || g.name,
-                cover: g.cover ? `${DAKNUX_COVER}/${this.cleanPath(g.cover)}` : FALLBACK_IMAGE,
+                cover: g.cover ? `${DAKNUX_COVER}/${this.cleanPath(g.cover)}` : "",
                 url: gameUrl,
                 source: "Daknux"
             });
@@ -301,6 +322,17 @@ class LumiSDK {
         return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     }
 
+    async reload() {
+        if (!this.grid) return;
+        this.grid.innerHTML = '<div class="lumi-empty">loading games...</div>';
+        try {
+            await this.loadGames();
+        } catch (e) {
+            console.error("lumi: reload failed", e);
+        }
+        this.applyFilters();
+    }
+
     renderGrid() {
         this.grid.innerHTML = '';
         const start = (this.currentPage - 1) * this.config.gamesPerPage;
@@ -309,7 +341,17 @@ class LumiSDK {
         if (pageGames.length === 0) {
             const empty = document.createElement('div');
             empty.className = 'lumi-empty';
-            empty.textContent = 'no games found';
+            if (this.games.length === 0) {
+                empty.textContent = "couldn't load games — ";
+                const retry = document.createElement('button');
+                retry.type = 'button';
+                retry.className = 'lumi-page-btn';
+                retry.textContent = 'retry';
+                retry.onclick = () => this.reload();
+                empty.appendChild(retry);
+            } else {
+                empty.textContent = 'no games found';
+            }
             this.grid.appendChild(empty);
             return;
         }
@@ -319,15 +361,31 @@ class LumiSDK {
             const card = document.createElement('div');
             card.className = 'lumi-game-card';
             card.title = game.title;
+            const art = game.cover
+                ? `<img src="${game.cover}" alt="" class="lumi-game-img" loading="lazy">`
+                : '<i data-lucide="gamepad-2"></i>';
             card.innerHTML = `
-                <span class="lumi-game-ic"><img src="${game.cover}" alt="" class="lumi-game-img" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"></span>
+                <span class="lumi-game-ic">${art}</span>
                 <span class="lumi-game-title">${this.escapeHtml(game.title)}</span>
             `;
+            const img = card.querySelector('img');
+            if (img) {
+                img.addEventListener('error', () => {
+                    const ic = document.createElement('i');
+                    ic.setAttribute('data-lucide', 'gamepad-2');
+                    img.replaceWith(ic);
+                    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                        window.lucide.createIcons();
+                    }
+                }, { once: true });
+            }
             card.onclick = () => this.playGame(game);
             fragment.appendChild(card);
         });
-
         this.grid.appendChild(fragment);
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
     }
 
     renderPagination() {
@@ -363,6 +421,10 @@ class LumiSDK {
     }
 
     updateView() {
+        if (this.countEl) {
+            const n = this.filteredGames.length;
+            this.countEl.textContent = n + (n === 1 ? " game" : " games");
+        }
         this.renderGrid();
         this.renderPagination();
     }
